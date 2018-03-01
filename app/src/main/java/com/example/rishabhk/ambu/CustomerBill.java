@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -27,16 +30,44 @@ public class CustomerBill extends AppCompatActivity {
     String username;
     private String apiPath = "http://semidigit.com/fm/android/customer_bill.php";
     private CustomerBill.CustomerBillTask mAuthTask = null;
-    TextView tv_bill;
-
+    ArrayList<String> room_name, device_id, srv_id, stored_count, current_count, last_updated;
+    ArrayList<RowItemForBill> rowItems;
+    ListView mylistview;
+    CustomAdapterBillList adapter;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.customer_bill);
-        tv_bill = (TextView) findViewById(R.id.tv_bill);
+        setContentView(R.layout.bill_list_result);
+        room_name = new ArrayList<>();
+        device_id = new ArrayList<>();
+        srv_id = new ArrayList<>();
+        stored_count = new ArrayList<>();
+        current_count = new ArrayList<>();
+        last_updated = new ArrayList<>();
+        makeHttpRequest();
+    }
+
+    public void makeHttpRequest(){
         username = PreferenceManager.getDefaultSharedPreferences(this).getString("username", "");
         mAuthTask = new CustomerBill.CustomerBillTask(this, username);
         mAuthTask.execute((Void) null);
+    }
+
+    public void initialize() {
+        float total = 0;
+        rowItems = new ArrayList<RowItemForBill>();
+        for (int i = 0; i < room_name.size(); i++) {
+            RowItemForBill item;
+            item = new RowItemForBill(room_name.get(i), stored_count.get(i), current_count.get(i), last_updated.get(i));
+            rowItems.add(item);
+            total = total + Float.parseFloat(stored_count.get(i)) + Float.parseFloat(current_count.get(i));
+        }
+        mylistview = (ListView) findViewById(R.id.list);
+        adapter = new CustomAdapterBillList(CustomerBill.this, rowItems);
+        mylistview.setAdapter(adapter);
+        TextView tv_total = (TextView) this.findViewById(R.id.total);
+        tv_total.setText(String.valueOf(total) +" L");
     }
 
     public class CustomerBillTask extends AsyncTask<Void, Void, String> {
@@ -77,15 +108,12 @@ public class CustomerBill extends AppCompatActivity {
                 String str = "";
                 for (int i = 0; i < bill_array.length(); i++) {
                     resultJsonObject = bill_array.getJSONObject(i);
-                    Iterator<?> keys = resultJsonObject.keys();
-                    while(keys.hasNext() ) {
-                        String key = (String)keys.next();
-                        str = str + key + " : ";
-                        str = str + resultJsonObject.get(key);
-                        str = str + "\n";
-                    }
-                    str = str + "\n\n";
-
+                    room_name.add("Kitchen");
+                    device_id.add((String)resultJsonObject.get("Device ID"));
+                    srv_id.add((String)resultJsonObject.get("SRV ID"));
+                    stored_count.add((String)resultJsonObject.get("Stored Count"));
+                    current_count.add((String)resultJsonObject.get("Current Count"));
+                    last_updated.add((String)resultJsonObject.get("Last Updated"));
                 }
                 return str;
 
@@ -102,7 +130,9 @@ public class CustomerBill extends AppCompatActivity {
         protected void onPostExecute(final String bill) {
             mAuthTask = null;
             pdia.dismiss();
-            tv_bill.setText(bill);
+            System.out.println("************ Showing bill");
+            System.out.println("************ " + bill);
+            initialize();
         }
 
         @Override
