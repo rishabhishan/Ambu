@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="#ffffff"
+    android:gravity="start|center_vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/textstart"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/rounded_circle"
+        android:gravity="center"
+        android:text="B"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="26dp" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:gravity="left|center"
+            android:maxLines="1"
+            android:scaleY="1.1"
+            android:singleLine="true"
+            android:text="Kitchen"
+            android:textColor="@color/text_list_color"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@id/litres_count"
+            />
+        <TextView
+            android:id="@+id/last_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="left|center"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:scaleY="1.1"
+            android:singleLine="true"
+            android:text="Last updated on "
+            android:textSize="12sp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/room_name"
+            />
+
+        <TextView
+            android:id="@+id/update_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/room_name"
+            android:layout_toRightOf="@id/last_update"
+            android:ellipsize="end"
+            android:gravity="left|center"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:scaleY="1.1"
+            android:singleLine="true"
+            android:text="Sep 16 AT 5:30 pm"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/litres_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:scaleY="1.1"
+            android:singleLine="true"
+            android:text="490 L"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"/>
+    </RelativeLayout>
+</LinearLayout>
