@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by rishabhk on 1/12/18.
@@ -70,6 +72,27 @@ public class CustomerBill extends AppCompatActivity {
         tv_total.setText(String.valueOf(total) +" L");
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            finish();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
     public class CustomerBillTask extends AsyncTask<Void, Void, String> {
 
         String response = "";
@@ -95,6 +118,10 @@ public class CustomerBill extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            String[] list = {"Kitchen", "Main Bathroom", "Bathroom 1", "Bathroom 2", "Bathroom 3"};
+            Random r = new Random();
+
+
             postDataParams = new HashMap<String, String>();
             postDataParams.put("HTTP_ACCEPT", "application/json");
             postDataParams.put("user_id", username);
@@ -108,7 +135,7 @@ public class CustomerBill extends AppCompatActivity {
                 String str = "";
                 for (int i = 0; i < bill_array.length(); i++) {
                     resultJsonObject = bill_array.getJSONObject(i);
-                    room_name.add("Kitchen");
+                    room_name.add(list[(i%list.length)]);
                     device_id.add((String)resultJsonObject.get("Device ID"));
                     srv_id.add((String)resultJsonObject.get("SRV ID"));
                     stored_count.add((String)resultJsonObject.get("Stored Count"));
