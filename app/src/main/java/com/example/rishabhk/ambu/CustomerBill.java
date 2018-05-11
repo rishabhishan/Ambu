@@ -2,12 +2,16 @@ package com.example.rishabhk.ambu;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -41,12 +45,6 @@ public class CustomerBill extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_list_result);
-        room_name = new ArrayList<>();
-        device_id = new ArrayList<>();
-        srv_id = new ArrayList<>();
-        stored_count = new ArrayList<>();
-        current_count = new ArrayList<>();
-        last_updated = new ArrayList<>();
         makeHttpRequest();
     }
 
@@ -57,13 +55,14 @@ public class CustomerBill extends AppCompatActivity {
     }
 
     public void initialize() {
+        float division_factor = Float.parseFloat(((TextView) findViewById(R.id.tv_division_factor)).getText().toString());
         float total = 0;
         rowItems = new ArrayList<RowItemForBill>();
         for (int i = 0; i < room_name.size(); i++) {
             RowItemForBill item;
-            item = new RowItemForBill(room_name.get(i), stored_count.get(i), current_count.get(i), last_updated.get(i));
+            item = new RowItemForBill(room_name.get(i), stored_count.get(i), current_count.get(i), last_updated.get(i), division_factor);
             rowItems.add(item);
-            total = total + Float.parseFloat(stored_count.get(i)) + Float.parseFloat(current_count.get(i));
+            total = total + Float.parseFloat(stored_count.get(i))/division_factor + Float.parseFloat(current_count.get(i))/division_factor;
         }
         mylistview = (ListView) findViewById(R.id.list);
         adapter = new CustomAdapterBillList(CustomerBill.this, rowItems);
@@ -93,6 +92,32 @@ public class CustomerBill extends AppCompatActivity {
         }, 2000);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                makeHttpRequest();
+                initialize();
+                return true;
+            case R.id.menu_logout:
+                PreferenceManager.getDefaultSharedPreferences(this).edit().remove("username").commit();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.bill_menu, menu);
+        return true;
+    }
+
     public class CustomerBillTask extends AsyncTask<Void, Void, String> {
 
         String response = "";
@@ -109,6 +134,12 @@ public class CustomerBill extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            room_name = new ArrayList<>();
+            device_id = new ArrayList<>();
+            srv_id = new ArrayList<>();
+            stored_count = new ArrayList<>();
+            current_count = new ArrayList<>();
+            last_updated = new ArrayList<>();
             pdia = new ProgressDialog(context);
             pdia.setMessage("Retrieving your bill...");
             pdia.show();

@@ -1,10 +1,13 @@
 package com.example.rishabhk.ambu;
 
+import android.preference.PreferenceManager;
+
 /**
  * Created by rishabhk on 01/03/18.
  */
 
 public class RowItemForBill {
+
 
     private String lastUpdated;
     private String startletter;
@@ -43,12 +46,12 @@ public class RowItemForBill {
         this.litres_count = litres_count;
     }
 
-    public RowItemForBill(String room_name, String storedCount, String currentCount, String lastUpdated) {
+    public RowItemForBill(String room_name, String storedCount, String currentCount, String lastUpdated, float division_factor) {
 
         this.lastUpdated = lastUpdated;
         this.startletter = String.valueOf(room_name.charAt(0));
         this.room_name = room_name;
-        this.litres_count = String.valueOf((Float.parseFloat(storedCount) + Float.parseFloat(currentCount))/10) + " L";
+        this.litres_count = String.valueOf((Float.parseFloat(storedCount) + Float.parseFloat(currentCount))/division_factor) + " L";
     }
 
 }

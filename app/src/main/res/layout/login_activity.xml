@@ -27,22 +27,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:drawableLeft="@mipmap/ic_mail_outline_white_18dp"
-            android:drawablePadding="32dp"
+            android:drawableLeft="@mipmap/ic_mail_outline_white_24dp"
+            android:drawablePadding="20dp"
             android:gravity="center_vertical"
             android:hint="Username"
-            android:paddingTop="12dp"
-            android:paddingBottom="8dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textSize="16sp"
-            android:textScaleX="1.1"
-            android:fontFamily="sans-serif-thin"/>
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white_greyish" />
 
         <EditText
@@ -50,27 +48,20 @@
             android:singleLine="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="32dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="8dp"
+            android:drawablePadding="20dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:background="@android:color/transparent"
-            android:drawableLeft="@mipmap/ic_lock_outline_white_18dp"
+            android:drawableLeft="@mipmap/ic_lock_outline_white_24dp"
             android:gravity="center_vertical"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:textScaleX="1.1"
-            android:fontFamily="sans-serif-thin"
-            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-light"
+
             />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:padding="12dp"
-            android:background="@color/white_greyish" />
+
 
         <Button
             android:id="@+id/btnLogin"
@@ -79,13 +70,11 @@
             android:layout_marginTop="52dp"
             android:background="@drawable/loginbutton_selector"
             android:padding="10dp"
-            android:scaleY="1.1"
             android:text="@string/authenticate"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:textScaleX="1.1"
+            android:textSize="18sp"
             android:onClick="login"
-            android:fontFamily="sans-serif-light"/>
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"/>
     </LinearLayout>
 
 
